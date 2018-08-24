@@ -1,3 +1,5 @@
+// url.go is WiP for experimental and testing purposes only.
+
 package k8s
 
 import (

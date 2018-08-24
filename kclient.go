@@ -1,3 +1,5 @@
+// kclient.go is WiP for experimental and testing purposes only.
+
 package k8s
 
 import (
@@ -13,12 +15,12 @@ type KClient struct {
 }
 
 // SetNS sets the namespace to operate within, defaults to all
-func (kc *KClient) SetNS(ns string) {
+func (kc *KClient) setNS(ns string) {
 	kc.ns = ns
 }
 
 // NewKClient returns a new RawClient
-func NewKClient(inCluster bool) (*KClient, error) {
+func newKClient(inCluster bool) (*KClient, error) {
 	var kc KClient
 	if inCluster {
 		cs, err := CreateICClientSet()

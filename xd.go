@@ -149,29 +149,6 @@ func makeXD(data string, xdChan chan XD, errChan chan error) {
 	return
 }
 
-/* BACKUP
-func CreateXD(json []string) ([]XD, error) {
-	var xds []XD
-	for _, j := range json {
-		x, err := makeXD(j)
-		if err != nil {
-			return xds, err
-		}
-		xds = append(xds, x)
-	}
-	return xds, nil
-}
-
-func makeXD(data string) (XD, error) {
-	xd := XD{}
-	err := json.Unmarshal([]byte(data), &xd)
-	if err != nil {
-		return xd, err
-	}
-	return xd, nil
-}
-*/
-
 // Raw returns the json output of XD
 func (x *XD) Raw() string {
 	j, _ := json.Marshal(x)
