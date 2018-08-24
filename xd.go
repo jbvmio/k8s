@@ -64,10 +64,25 @@ type Status struct {
 	AvailableReplicase int                 `json:"availableReplicas,omitempty"`
 	ReadyReplicas      int                 `json:"readyReplicas,omitempty"`
 	UpdatedReplicas    int                 `json:"updatedReplicas,omitempty"`
+	Addresses          []Addresses         `json:"addresses,omitempty"`
 	ContainerStatuses  []ContainerStatuses `json:"containerStatuses,omitempty"`
+	Conditions         []Conditions        `json:"conditions,omitempty"`
 
 	NodeInfo `json:"nodeInfo,omitempty"`
-	//LoadBalancer       string `json:"loadBalancer,omitempty"`
+}
+
+// Addresses definition:
+type Addresses struct {
+	Address string `json:"address,omitempty"`
+	Type    string `json:"type,omitempty"`
+}
+
+// Conditions definition:
+type Conditions struct {
+	Status  string `json:"status,omitempty"`
+	Message string `json:"message,omitempty"`
+	Reason  string `json:"reason,omitempty"`
+	Type    string `json:"type,omitempty"`
 }
 
 // ContainerStatuses definition (is []array):
@@ -92,8 +107,8 @@ type Running struct {
 
 // Waiting definition
 type Waiting struct {
-	Message       string `json:"message,omitempty"`
-	WaitingReason string `json:"reason,omitempty"`
+	Message string `json:"message,omitempty"`
+	Reason  string `json:"reason"`
 }
 
 // Terminated definition
