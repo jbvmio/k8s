@@ -8,6 +8,25 @@ type Results struct {
 	XData []XD
 }
 
+// GetContainers returns a Containers Result by converting a Pod Result (WiP*)
+func (r *Results) GetContainers() (Results, error) {
+	var results Results
+	if r.Kind != "Pod" {
+		return results, fmt.Errorf("cannot convert Results of kind %v into a Containers", r.Kind)
+	}
+	return results, nil
+}
+
+// GetMany returns Results from the given kind and an array of names
+// kind options are "pods", "nodes", "replicasets", "deployments", "services", "ingresses"
+func (rc *RawClient) GetMany(kind string, names []string) (Results, error) {
+	res, err := rc.findManyResults(kind, names)
+	if err != nil {
+		return res, err
+	}
+	return res, nil
+}
+
 // GetPods returns pod based Results based on the search string
 func (rc *RawClient) GetPods(search string) (Results, error) {
 	res, err := rc.findResults("pods", search)
@@ -62,7 +81,7 @@ func (rc *RawClient) GetIngress(search string) (Results, error) {
 	return res, nil
 }
 
-// findResults returns pod based Results based on the search string
+// findResults returns Results based on the kind and target name search string
 func (rc *RawClient) findResults(kind, search string) (Results, error) {
 	var res Results
 	switch kind {
@@ -91,4 +110,59 @@ func (rc *RawClient) findResults(kind, search string) (Results, error) {
 	}
 	res.XData = data
 	return res, nil
+}
+
+// findManyResults returns Results based on the kind and target names contained in an array []string
+func (rc *RawClient) findManyResults(kind string, names []string) (Results, error) {
+	var res Results
+	var errd error
+	switch kind {
+	case "pods":
+		res.Kind = "Pod"
+	case "nodes":
+		res.Kind = "Node"
+	case "replicasets":
+		res.Kind = "ReplicaSet"
+	case "deployments":
+		res.Kind = "Deployment"
+	case "services":
+		res.Kind = "Service"
+	case "ingresses":
+		res.Kind = "Ingress"
+	default:
+		return res, fmt.Errorf("No resources found for the given request")
+	}
+	var data []XD
+	xdChan := make(chan []XD, 100)
+	errChan := make(chan error, 10)
+	all, err := rc.RawAll(kind)
+	if err != nil {
+		return res, err
+	}
+	for _, n := range names {
+		go rc.getXD(n, &all, xdChan, errChan)
+	}
+	for i := 0; i < len(names); i++ {
+		select {
+		case err := <-errChan:
+			errd = err
+		case xd := <-xdChan:
+			for _, x := range xd {
+				data = append(data, x)
+			}
+		}
+	}
+	res.XData = data
+	return res, errd
+}
+
+func (rc *RawClient) getXD(name string, all *[]byte, xdChan chan []XD, errChan chan error) {
+	found := parseFor(*all, name)
+	data, err := createXD(found)
+	if err != nil {
+		errChan <- err
+		return
+	}
+	xdChan <- data
+	return
 }

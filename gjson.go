@@ -37,8 +37,8 @@ func parseFor(raw []byte, name string) []string {
 	search := string(`items.#[metadata.name%"*` + name + `*"]#`)
 	results := gjson.GetManyBytes(raw, search)
 	var json []string
-	for _, url := range results {
-		url.ForEach(func(k, v gjson.Result) bool {
+	for _, r := range results {
+		r.ForEach(func(k, v gjson.Result) bool {
 			json = append(json, v.Raw)
 			return true
 		})
