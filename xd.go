@@ -90,7 +90,7 @@ type ContainerStatuses struct {
 	ContainerStatusName string `json:"name,omitempty"`
 	Ready               bool   `json:"ready"`
 	RestartCount        int    `json:"restartCount"`
-	*State              `json:"state,omitempty"`
+	*State              `json:"state"`
 }
 
 // State definition
@@ -108,15 +108,16 @@ type Running struct {
 // Waiting definition
 type Waiting struct {
 	Message string `json:"message,omitempty"`
-	Reason  string `json:"reason"`
+	Reason  string `json:"reason,omitempty"`
 }
 
 // Terminated definition
 type Terminated struct {
-	Started          time.Time `json:"startedAt,omitempty"`
-	Finished         time.Time `json:"finishedAt,omitempty"`
-	TerminatedReason string    `json:"reason,omitempty"`
-	ExitCode         int       `json:"exitCode,omitempty"`
+	Started  time.Time `json:"startedAt,omitempty"`
+	Finished time.Time `json:"finishedAt,omitempty"`
+	Reason   string    `json:"reason,omitempty"`
+	//TerminatedReason string    `json:"reason,omitempty"`
+	ExitCode int `json:"exitCode,omitempty"`
 }
 
 // NodeInfo struct definition:

@@ -17,7 +17,7 @@ func (r *Results) GetContainers() (Results, error) {
 	return results, nil
 }
 
-// GetMany returns Results from the given kind and an array of names
+// GetMany returns Results from the given kind and a list of names contained in an string array
 // kind options are "pods", "nodes", "replicasets", "deployments", "services", "ingresses"
 func (rc *RawClient) GetMany(kind string, names []string) (Results, error) {
 	res, err := rc.findManyResults(kind, names)
@@ -27,9 +27,10 @@ func (rc *RawClient) GetMany(kind string, names []string) (Results, error) {
 	return res, nil
 }
 
-// GetPods returns pod based Results based on the search string
-func (rc *RawClient) GetPods(search string) (Results, error) {
-	res, err := rc.findResults("pods", search)
+// GetPods return pod based Results based on the search strings
+func (rc *RawClient) GetPods(search ...string) (Results, error) {
+	//res, err := rc.findResults("pods", search)
+	res, err := rc.findManyResults("pods", search)
 	if err != nil {
 		return res, err
 	}
@@ -38,7 +39,8 @@ func (rc *RawClient) GetPods(search string) (Results, error) {
 
 // GetNodes returns node based Results based on the search string
 func (rc *RawClient) GetNodes(search string) (Results, error) {
-	res, err := rc.findResults("nodes", search)
+	//res, err := rc.findResults("nodes", search)
+	res, err := rc.findManyResults("nodes", search)
 	if err != nil {
 		return res, err
 	}
@@ -47,7 +49,8 @@ func (rc *RawClient) GetNodes(search string) (Results, error) {
 
 // GetRS returns replicaset based Results based on the search string
 func (rc *RawClient) GetRS(search string) (Results, error) {
-	res, err := rc.findResults("replicasets", search)
+	//res, err := rc.findResults("replicasets", search)
+	res, err := rc.findManyResults("replicasets", search)
 	if err != nil {
 		return res, err
 	}
@@ -56,7 +59,8 @@ func (rc *RawClient) GetRS(search string) (Results, error) {
 
 // GetSvc returns node service Results based on the search string
 func (rc *RawClient) GetSvc(search string) (Results, error) {
-	res, err := rc.findResults("services", search)
+	//res, err := rc.findResults("services", search)
+	res, err := rc.findManyResults("services", search)
 	if err != nil {
 		return res, err
 	}
@@ -65,7 +69,8 @@ func (rc *RawClient) GetSvc(search string) (Results, error) {
 
 // GetDeployments returns deployment based Results based on the search string
 func (rc *RawClient) GetDeployments(search string) (Results, error) {
-	res, err := rc.findResults("deployments", search)
+	//res, err := rc.findResults("deployments", search)
+	res, err := rc.findManyResults("deployments", search)
 	if err != nil {
 		return res, err
 	}
@@ -74,7 +79,8 @@ func (rc *RawClient) GetDeployments(search string) (Results, error) {
 
 // GetIngress returns ingress based Results based on the search string
 func (rc *RawClient) GetIngress(search string) (Results, error) {
-	res, err := rc.findResults("ingresses", search)
+	//res, err := rc.findResults("ingresses", search)
+	res, err := rc.findManyResults("ingresses", search)
 	if err != nil {
 		return res, err
 	}
