@@ -38,7 +38,7 @@ func (rc *RawClient) GetPods(search ...string) (Results, error) {
 }
 
 // GetNodes returns node based Results based on the search string
-func (rc *RawClient) GetNodes(search string) (Results, error) {
+func (rc *RawClient) GetNodes(search ...string) (Results, error) {
 	//res, err := rc.findResults("nodes", search)
 	res, err := rc.findManyResults("nodes", search)
 	if err != nil {
@@ -48,7 +48,7 @@ func (rc *RawClient) GetNodes(search string) (Results, error) {
 }
 
 // GetRS returns replicaset based Results based on the search string
-func (rc *RawClient) GetRS(search string) (Results, error) {
+func (rc *RawClient) GetRS(search ...string) (Results, error) {
 	//res, err := rc.findResults("replicasets", search)
 	res, err := rc.findManyResults("replicasets", search)
 	if err != nil {
@@ -58,7 +58,7 @@ func (rc *RawClient) GetRS(search string) (Results, error) {
 }
 
 // GetSvc returns node service Results based on the search string
-func (rc *RawClient) GetSvc(search string) (Results, error) {
+func (rc *RawClient) GetSvc(search ...string) (Results, error) {
 	//res, err := rc.findResults("services", search)
 	res, err := rc.findManyResults("services", search)
 	if err != nil {
@@ -68,7 +68,7 @@ func (rc *RawClient) GetSvc(search string) (Results, error) {
 }
 
 // GetDeployments returns deployment based Results based on the search string
-func (rc *RawClient) GetDeployments(search string) (Results, error) {
+func (rc *RawClient) GetDeployments(search ...string) (Results, error) {
 	//res, err := rc.findResults("deployments", search)
 	res, err := rc.findManyResults("deployments", search)
 	if err != nil {
@@ -78,7 +78,7 @@ func (rc *RawClient) GetDeployments(search string) (Results, error) {
 }
 
 // GetIngress returns ingress based Results based on the search string
-func (rc *RawClient) GetIngress(search string) (Results, error) {
+func (rc *RawClient) GetIngress(search ...string) (Results, error) {
 	//res, err := rc.findResults("ingresses", search)
 	res, err := rc.findManyResults("ingresses", search)
 	if err != nil {
