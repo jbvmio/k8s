@@ -58,15 +58,17 @@ type Ports struct {
 
 // Status contains the available Status data for all resources
 type Status struct {
-	HostIP             string              `json:"hostIP,omitempty"`
-	Phase              string              `json:"phase,omitempty"`
-	PodIP              string              `json:"podIP,omitempty"`
-	AvailableReplicase int                 `json:"availableReplicas,omitempty"`
-	ReadyReplicas      int                 `json:"readyReplicas,omitempty"`
-	UpdatedReplicas    int                 `json:"updatedReplicas,omitempty"`
-	Addresses          []Addresses         `json:"addresses,omitempty"`
-	ContainerStatuses  []ContainerStatuses `json:"containerStatuses,omitempty"`
-	Conditions         []Conditions        `json:"conditions,omitempty"`
+	HostIP               string              `json:"hostIP,omitempty"`
+	Phase                string              `json:"phase,omitempty"`
+	PodIP                string              `json:"podIP,omitempty"`
+	AvailableReplicas    int                 `json:"availableReplicas,omitempty"`
+	FullyLabeledReplicas int                 `json:"fullyLabeledReplicas,omitempty"`
+	ReadyReplicas        int                 `json:"readyReplicas,omitempty"`
+	UnavailableReplicas  int                 `json:"unavailableReplicas,omitempty"`
+	UpdatedReplicas      int                 `json:"updatedReplicas,omitempty"`
+	Addresses            []Addresses         `json:"addresses,omitempty"`
+	ContainerStatuses    []ContainerStatuses `json:"containerStatuses,omitempty"`
+	Conditions           []Conditions        `json:"conditions,omitempty"`
 
 	NodeInfo `json:"nodeInfo,omitempty"`
 }
