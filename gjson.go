@@ -32,9 +32,23 @@ func returnSelfLinks(raw []byte) []string {
 	return selfLinks
 }
 
-// parseFor parses a json response for the specified named resource and returns the corresponding json for the resource
+// parseFor parses a json response, searching for the specified named resource and returns the corresponding json for any results found
 func parseFor(raw []byte, name string) []string {
 	search := string(`items.#[metadata.name%"*` + name + `*"]#`)
+	results := gjson.GetManyBytes(raw, search)
+	var json []string
+	for _, r := range results {
+		r.ForEach(func(k, v gjson.Result) bool {
+			json = append(json, v.Raw)
+			return true
+		})
+	}
+	return json
+}
+
+// parseExact parses a json response for an exact match and returns the corresponding json for any results found
+func parseExact(raw []byte, name string) []string {
+	search := string(`items.#[metadata.name=="` + name + `"]#`)
 	results := gjson.GetManyBytes(raw, search)
 	var json []string
 	for _, r := range results {

@@ -163,7 +163,12 @@ func (rc *RawClient) findManyResults(kind string, names []string) (Results, erro
 }
 
 func (rc *RawClient) getXD(name string, all *[]byte, xdChan chan []XD, errChan chan error) {
-	found := parseFor(*all, name)
+	var found []string
+	if rc.exactMatches {
+		found = parseExact(*all, name)
+	} else {
+		found = parseFor(*all, name)
+	}
 	data, err := createXD(found)
 	if err != nil {
 		errChan <- err

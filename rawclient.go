@@ -10,14 +10,20 @@ import (
 
 // RawClient is like Client but dedicated for raw input/output
 type RawClient struct {
-	cs       *kubernetes.Clientset
-	ns       string
-	listOpts metav1.ListOptions
+	cs           *kubernetes.Clientset
+	ns           string
+	exactMatches bool
+	listOpts     metav1.ListOptions
 }
 
 // SetNS sets the namespace to operate within, defaults to all
 func (rc *RawClient) SetNS(ns string) {
 	rc.ns = ns
+}
+
+// ExactMatches sets the behavior of searching for resources, either wildcard or exact, defaults to wildcard or false
+func (rc *RawClient) ExactMatches(x bool) {
+	rc.exactMatches = x
 }
 
 // NewRawClient returns a new RawClient
@@ -160,6 +166,10 @@ func (rc *RawClient) SearchFor(kind, name string) ([]string, error) {
 	all, err := rc.RawAll(kind)
 	if err != nil {
 		return jsonArray, err
+	}
+	if rc.exactMatches {
+		jsonArray = parseExact(all, name)
+		return jsonArray, nil
 	}
 	jsonArray = parseFor(all, name)
 	return jsonArray, nil
