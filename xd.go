@@ -18,6 +18,7 @@ type Metadata struct {
 	Name            string            `json:"name,omitempty"`
 	Created         time.Time         `json:"creationTimestamp,omitempty"`
 	Namespace       string            `json:"namespace,omitempty"`
+	Labels          map[string]string `json:"labels,omitempty"`
 	Selflink        string            `json:"selfLink,omitempty"`
 	UID             string            `json:"uid,omitempty"`
 	OwnerReferences []OwnerReferences `json:"ownerReferences,omitempty"`

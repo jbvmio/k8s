@@ -91,6 +91,20 @@ func CreateOCClientSet() (*kubernetes.Clientset, error) {
 	return clientset, nil
 }
 
+// CreateManualClientSet returns an Out of Cluster Clientset from a manual config
+func CreateManualClientSet(url string) (*kubernetes.Clientset, error) {
+	var clientset *kubernetes.Clientset
+	config, err := ManualConfig(url)
+	if err != nil {
+		return clientset, err
+	}
+	clientset, err = kubernetes.NewForConfig(config)
+	if err != nil {
+		return clientset, err
+	}
+	return clientset, nil
+}
+
 // CreateICClientSet returns an In Cluster Clientset
 func CreateICClientSet() (*kubernetes.Clientset, error) {
 	var clientset *kubernetes.Clientset

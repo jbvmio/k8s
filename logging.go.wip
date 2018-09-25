@@ -1,0 +1,38 @@
+package k8s
+
+import (
+	"strconv"
+
+	"k8s.io/api/core/v1"
+	"k8s.io/client-go/rest"
+)
+
+// RawLogsAll returns all container logs (*WiP)
+func (rc *RawClient) RawLogsAll(podID string) *rest.Request {
+
+	logOptions := &v1.PodLogOptions{
+		Container: podID,
+		//Follow:     cmdutil.GetFlagBool(cmd, "follow"),
+		//Previous:   cmdutil.GetFlagBool(cmd, "previous"),
+		//Timestamps: cmdutil.GetFlagBool(cmd, "timestamps"),
+	}
+
+	req := rc.cs.ExtensionsV1beta1().RESTClient().Get().
+		Namespace(rc.ns).
+		Name(podID).
+		Resource("pods").
+		SubResource("log").
+		Param("follow", strconv.FormatBool(logOptions.Follow)).
+		Param("container", logOptions.Container).
+		Param("previous", strconv.FormatBool(logOptions.Previous)).
+		Param("timestamps", strconv.FormatBool(logOptions.Timestamps))
+
+	//Get().Namespace(rc.ns).Resource("ingresses").VersionedParams(&rc.listOpts, scheme.ParameterCodec).DoRaw()
+	return req
+}
+
+/*
+https://github.com/kubernetes/kubernetes/blob/c2e90cd1549dff87db7941544ce15f4c8ad0ba4c/pkg/kubectl/cmd/log.go
+https://github.com/kubernetes/dashboard/blob/master/src/app/backend/resource/container/logs.go
+https://github.com/kubernetes/kubernetes/blob/master/pkg/kubectl/cmd/logs.go
+*/

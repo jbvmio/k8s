@@ -47,6 +47,18 @@ func NewRawClient(inCluster bool) (*RawClient, error) {
 	return &rc, nil
 }
 
+// NewManualClient returns a new RawClient using a manual config
+func NewManualClient(url string) (*RawClient, error) {
+	var rc RawClient
+	cs, err := CreateManualClientSet(url)
+	if err != nil {
+		return &rc, err
+	}
+	rc.cs = cs
+	rc.listOpts = metav1.ListOptions{}
+	return &rc, nil
+}
+
 // RawAllPods returns all pods in json
 func (rc *RawClient) RawAllPods() ([]byte, error) {
 	p, err := rc.cs.CoreV1().RESTClient().Get().Namespace(rc.ns).Resource("pods").VersionedParams(&rc.listOpts, scheme.ParameterCodec).DoRaw()
