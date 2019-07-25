@@ -60,6 +60,8 @@ type Ports struct {
 // Status contains the available Status data for all resources
 type Status struct {
 	HostIP               string              `json:"hostIP,omitempty"`
+	Message              string              `json:"message,omitempty"`
+	Reason               string              `json:"reason,omitempty"`
 	Phase                string              `json:"phase,omitempty"`
 	PodIP                string              `json:"podIP,omitempty"`
 	AvailableReplicas    int                 `json:"availableReplicas,omitempty"`
@@ -139,7 +141,8 @@ type NodeInfo struct {
 
 // CreateXD takes json/output created by RawClient and creates an []XD struct if possible
 func createXD(json []string) ([]XD, error) {
-	var xds []XD
+	//var xds []XD
+	xds := make([]XD, 0, len(json))
 	var errd error
 	xdChan := make(chan XD, 100)
 	errChan := make(chan error, 100)

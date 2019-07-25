@@ -36,7 +36,8 @@ func returnSelfLinks(raw []byte) []string {
 func parseFor(raw []byte, name string) []string {
 	search := string(`items.#[metadata.name%"*` + name + `*"]#`)
 	results := gjson.GetManyBytes(raw, search)
-	var json []string
+	//var json []string
+	json := make([]string, 0, len(results))
 	for _, r := range results {
 		r.ForEach(func(k, v gjson.Result) bool {
 			json = append(json, v.Raw)
@@ -50,7 +51,8 @@ func parseFor(raw []byte, name string) []string {
 func parseExact(raw []byte, name string) []string {
 	search := string(`items.#[metadata.name=="` + name + `"]#`)
 	results := gjson.GetManyBytes(raw, search)
-	var json []string
+	//var json []string
+	json := make([]string, 0, len(results))
 	for _, r := range results {
 		r.ForEach(func(k, v gjson.Result) bool {
 			json = append(json, v.Raw)

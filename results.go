@@ -138,7 +138,8 @@ func (rc *RawClient) findManyResults(kind string, names []string) (Results, erro
 	default:
 		return res, fmt.Errorf("No resources found for the given request")
 	}
-	var data []XD
+	//var data []XD
+	data := make([]XD, 0, len(names))
 	xdChan := make(chan []XD, 100)
 	errChan := make(chan error, 10)
 	all, err := rc.RawAll(kind)
@@ -146,7 +147,8 @@ func (rc *RawClient) findManyResults(kind string, names []string) (Results, erro
 		return res, err
 	}
 	for _, n := range names {
-		go rc.getXD(n, &all, xdChan, errChan)
+		//go rc.getXD(n, &all, xdChan, errChan)
+		go rc.getXD(n, all, xdChan, errChan)
 	}
 	for i := 0; i < len(names); i++ {
 		select {
@@ -162,12 +164,13 @@ func (rc *RawClient) findManyResults(kind string, names []string) (Results, erro
 	return res, errd
 }
 
-func (rc *RawClient) getXD(name string, all *[]byte, xdChan chan []XD, errChan chan error) {
+//func (rc *RawClient) getXD(name string, all *[]byte, xdChan chan []XD, errChan chan error) {
+func (rc *RawClient) getXD(name string, all []byte, xdChan chan []XD, errChan chan error) {
 	var found []string
 	if rc.exactMatches {
-		found = parseExact(*all, name)
+		found = parseExact(all, name)
 	} else {
-		found = parseFor(*all, name)
+		found = parseFor(all, name)
 	}
 	data, err := createXD(found)
 	if err != nil {
